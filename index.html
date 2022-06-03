@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Container Definition</title>
+    <link href=style.css rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div class="main-block">
+    <form action="/">
+      <h3>Container Definition</h3>
+      <fieldset>
+        <div>
+            <label>Number of segments:</label>
+            <input type="text" name="n_segs" required>
+        </div>
+        <div>
+            <label>Thickness of container base:</label>
+            <input type="text" name="cb_thickness" required> mm
+        </div>
+        <br>
+        <div class="subtitle">Heights measured relative to inner base of container</div>
+        <div>
+            <label>Clearance height:</label>
+            <input type="text" name="c_height" required>
+        </div>
+        <div>
+            <label>Maximum pipetting height:</label>
+            <input type="text" name="mp_height" required>
+        </div>
+        <div>
+            <label>Touch off at bottom height:</label>
+            <input type="text" name="b_height" required>
+        </div>
+        <div class="children">
+            <input type="checkbox" name="wick">
+            <label>Wick side of container valid:</label>
+        </div>
+        <div class="children">
+            <input type="checkbox" name="LLD">
+            <label>Liquid level detect valid:</label>
+        </div>
+        <div>
+            <label>Liquid seeking height:</label>
+            <input type="text" name="LSH" required>
+        </div>
+        <div>
+            <label>Capacitive LLD:</label>  
+            <select name="CLLD" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="children">
+            <label>3D Model:</label>
+            <input type="file" name="model">
+        </div>
+        <div>
+            <label>3D Model Offsets (x, y, z):</label>
+            <input type="text" name="x" required>
+            <input type="text" name="y" required>
+            <input type="text" name="z" required>
+        </div>
+        <div>
+      </fieldset>
+      <button type="submit" href="/">Finish</button>
+    </form>
+    </div> 
+  </body>
+</html>
