@@ -42,15 +42,10 @@ fieldset {
     color: #7ab424
 }
 
-label {
-    padding: 0 5px;
-    text-align: right;
-    vertical-align: middle;
-}
-
 input {
     padding: 0px;
     margin: 3px;
+    margin-bottom: 8px;
     width: 50px;
     vertical-align: middle;
 }

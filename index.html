@@ -9,14 +9,23 @@
     <form action="/">
       <h3>Container Definition</h3>
       <fieldset>
-        <div>
-            <label>Number of segments:</label>
-            <input type="text" name="n_segs" required>
+        <div style="display:flex;flex-direction:row;gap:50px">
+            <div style="display:flex;flex-direction:column;justify-content:flex-start;">
+                <div>
+                    <label>Number of segments:</label>
+                    <input type="text" name="n_segs" required>
+                </div>
+                <div>
+                    <label>Thickness of container base:</label>
+                    <input type="text" name="cb_thickness" required> mm
+                </div>
+            </div>
+                <div>
+                    <img src="images\vial_height.PNG" alt="start of new container wall angle marks new segment"></img>
+                </div>
         </div>
-        <div>
-            <label>Thickness of container base:</label>
-            <input type="text" name="cb_thickness" required> mm
-        </div>
+
+
         <br>
         <div class="subtitle">Heights measured relative to inner base of container</div>
         <div>
@@ -32,12 +41,12 @@
             <input type="text" name="b_height" required>
         </div>
         <div class="children">
-            <input type="checkbox" name="wick">
-            <label>Wick side of container valid:</label>
+            <input type="checkbox" name="wick" width="30px">
+            <label>Wick side of container valid</label>
         </div>
         <div class="children">
             <input type="checkbox" name="LLD">
-            <label>Liquid level detect valid:</label>
+            <label>Liquid level detect valid</label>
         </div>
         <div>
             <label>Liquid seeking height:</label>
@@ -65,23 +74,28 @@
         </div><br>
         <div class="subtitle">Segment 1</div>
         <div class="subtitle">Segment approximation</div>
-        <div>
-            <input type="radio" name="shape1" id="cyl" value="cylinder">
-            <label for="cyl">Cylinder</label>
-            <input type="radio" name="shape1" id="rect" value="rectangle">
-            <label for="rect">Rectangle</label><br>
-            <input type="radio" name="shape1" id="inv_cone" value="inv_cone">
-            <label for="inv_cone">Inverted Cone</label>
-            <input type="radio" name="shape1" id="v_cone" value="v_cone">
-            <label for="v_cone">V-Cone</label><br>
-            <input type="radio" name="shape1" id="round_base" value="round_base">
-            <label for="round_base">Rounded base segment</label>
-            <input type="radio" name="shape1" id="vc_base" value="vc_base">
-            <label for="vc_base">V-Cone base segment</label>
-        </div><br>
+        <div style="display:flex;flex-direction:row;gap:50px">
+            <div style="display:flex;flex-direction:column;justify-content:flex-start;">
+                <div>
+                    <input type="radio" name="shape1" id="cyl" value="cylinder">
+                    <label for="cyl">Cylinder</label>
+                    <input type="radio" name="shape1" id="rect" value="rectangle">
+                    <label for="rect">Rectangle</label><br>
+                    <input type="radio" name="shape1" id="inv_cone" value="inv_cone">
+                    <label for="inv_cone">Inverted Cone</label>
+                    <input type="radio" name="shape1" id="v_cone" value="v_cone">
+                    <label for="v_cone">V-Cone</label><br>
+                    <input type="radio" name="shape1" id="round_base" value="round_base">
+                    <label for="round_base">Rounded base segment</label>
+                    <input type="radio" name="shape1" id="vc_base" value="vc_base">
+                    <label for="vc_base">V-Cone base segment</label>
+                </div>
+            </div>
+        </div>
+        <br>
         <div id="shape_img1"></div>
         <div>
-            <label>Upper Internal Diameter</label>
+            <label>Upper Internal Diameter:</label>
             <input type="text" name="up_ID" required>
         </div>
         <div>
@@ -109,7 +123,7 @@
             <label for="vc_base">V-Cone base segment</label>
         </div>
         <div>
-            <label>Upper Internal Diameter</label>
+            <label>Upper Internal Diameter:</label>
             <input type="text" name="up_ID" required>
         </div>
         <div>
