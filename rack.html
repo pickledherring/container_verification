@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rack Definition</title>
+    <link href=style.css rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div class="main-block">
+    <form autocomplete="on">
+      <h3>Rack Definition&emsp;<a href="container.html">Container Definition</a></h3>
+      <fieldset>
+        <div class="subtitle">Type</div>
+        <div>
+            <input type="radio" name="type" id="plate" value="plate">
+            <label for="plate">Microtiter plate</label>
+            <input type="radio" name="type" id="reg_rack" value="reg_rack">
+            <label for="reg_rack">Regular rectangular rack</label>
+            <input type="radio" name="type" id="irreg_rack" value="irreg_rack">
+            <label for="irreg_rack">Irregular rack</label>
+        </div>
+        <div style="display:flex;flex-direction:row;gap:50px">
+            <div style="display:flex;flex-direction:column;justify-content:flex-start;">
+                <label>Include cover definition</label>
+                <input type="checkbox" name="inc_cov_def">
+            </div>
+            <div style="display:flex;flex-direction:row;justify-content:flex-start;">
+                <div>
+                    <input type="radio" name="vis_default" id="no" value="no">
+                    <label for="no">No</label>
+                    <input type="radio" name="vis_default" id="yes" value="yes">
+                    <label for="yes">Yes</label>
+                </div>
+            </div>
+        </div>
+        <br>
+
+
+
+
+        <div class="subtitle">Heights measured relative to inner base of container</div>
+        <div>
+            <label>Clearance height:</label>
+            <input type="text" name="c_height" required>
+        </div>
+        <div>
+            <label>Maximum pipetting height:</label>
+            <input type="text" name="mp_height" required>
+        </div>
+        <div>
+            <label>Touch off at bottom height:</label>
+            <input type="text" name="b_height" required>
+        </div>
+        <div class="children">
+            <input type="checkbox" name="wick" width="30px">
+            <label>Wick side of container valid</label>
+        </div>
+        <div class="children">
+            <input type="checkbox" name="LLD">
+            <label>Liquid level detect valid</label>
+        </div>
+        <div>
+            <label>Liquid seeking height:</label>
+            <input type="text" name="LSH" required>
+        </div>
+        <div>
+            <label>Capacitive LLD:</label>  
+            <select name="CLLD" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="subtitle">Segment 1</div>
+        <div class="subtitle">Segment approximation</div>
+        <div>
+            <input type="radio" name="shape1" id="cyl" value="cylinder" onclick="changeOps(this.value, 1)">
+            <label for="cyl">Cylinder</label>
+            <input type="radio" name="shape1" id="rect" value="rectangle" onclick="changeOps(this.value, 1)">
+            <label for="rect">Rectangle</label><br>
+            <input type="radio" name="shape1" id="inv_cone" value="inverted_cone" onclick="changeOps(this.value, 1)">
+            <label for="inv_cone">Inverted Cone</label>
+            <input type="radio" name="shape1" id="v_cone" value="v_cone" onclick="changeOps(this.value, 1)">
+            <label for="v_cone">V-Cone</label><br>
+            <input type="radio" name="shape1" id="blank" value="blank" onclick="changeOps(this.value, 1)">
+            <label for="blank">Leave Blank</label><br>
+        </div>
+        <br>
+        <div style="display:flex;flex-direction:row;gap:50px">
+            <div>
+                <img id="shape_img1" src="images\blank.png" alt="container measurement diagram"></img>
+            </div>
+            <div id="interMeasures1" style="display:flex;flex-direction:column;justify-content:flex-start;">
+                <div>
+                    <label>Upper Internal Diameter:</label>
+                    <input type="text" name="up_ID1">mm
+                </div>
+                <div>
+                    <label>Lower Internal Diameter:</label>
+                    <input type="text" name="low_ID1">mm
+                </div>
+                <div>
+                    <label>Internal Segment Height:</label>
+                    <input type="text" name="in_SH1">mm
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="subtitle">Segment 2</div>
+        <div class="subtitle">Segment approximation</div>
+        <div>
+            <input type="radio" name="shape2" id="cyl2" value="cylinder" onclick="changeOps(this.value, 2)">
+            <label for="cyl2">Cylinder</label>
+            <input type="radio" name="shape2" id="rect2" value="rectangle" onclick="changeOps(this.value, 2)">
+            <label for="rect2">Rectangle</label><br>
+            <input type="radio" name="shape2" id="inv_cone2" value="inverted_cone" onclick="changeOps(this.value, 2)">
+            <label for="inv_cone2">Inverted Cone</label>
+            <input type="radio" name="shape2" id="v_cone2" value="v_cone" onclick="changeOps(this.value, 2)">
+            <label for="v_cone2">V-Cone</label><br>
+            <input type="radio" name="shape2" id="round_base2" value="round_base" onclick="changeOps(this.value, 2)">
+            <label for="round_base2">Rounded base segment</label>
+            <input type="radio" name="shape2" id="vc_base2" value="v_base" onclick="changeOps(this.value, 2)">
+            <label for="vc_base2">V-Cone base segment</label><br>
+            <input type="radio" name="shape2" id="blank2" value="blank" onclick="changeOps(this.value, 2)">
+            <label for="blank2">Leave Blank</label><br>
+        </div>
+        <br>
+        <div style="display:flex;flex-direction:row;gap:50px">
+            <div>
+                <img id=shape_img2 src="images\blank.png" alt="container measurement diagram"></img>
+            </div>
+            <div id="interMeasures2" style="display:flex;flex-direction:column;justify-content:flex-start;">
+                <div>
+                    <label>Upper Internal Diameter:</label>
+                    <input type="text" name="up_ID2">mm
+                </div>
+                <div>
+                    <label>Lower Internal Diameter:</label>
+                    <input type="text" name="low_ID2">mm
+                </div>
+                <div>
+                    <label>Internal Segment Height:</label>
+                    <input type="text" name="in_SH2">mm
+                </div>
+            </div>
+        </div>
+      </fieldset>
+      <button type="submit">Finish</button>
+    </form>
+    </div>
+    <script src="logic.js" type="text/javascript"></script>
+  </body>
+</html>
