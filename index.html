@@ -11,15 +11,21 @@
         <h3>Container Definition</h3>
         <details open>
             <summary></summary>
+            <div>
+                <label>Container name:</label>
+                <select id="opt_conts" name="cont_name">
+                    <option> </option>
+                </select>
+            </div>
             <div style="display:flex;flex-direction:row;gap:50px">
                 <div style="display:flex;flex-direction:column;justify-content:flex-start;">
                     <div>
                         <label>Number of segments:</label>
-                        <input type="text" name="n_segs" required>
+                        <input type="text" name="n_segs" >
                     </div>
                     <div>
                         <label>Thickness of container base:</label>
-                        <input type="text" name="cb_thickness" required> mm
+                        <input type="text" name="cb_thickness" > mm
                     </div>
                 </div>
                     <div>
@@ -30,31 +36,31 @@
             <div>(Heights measured relative to inner base of container)</div>
             <div>
                 <label>Clearance height:</label>
-                <input type="text" name="c_height" required>
+                <input type="text" name="c_height">
             </div>
             <div>
                 <label>Maximum pipetting height:</label>
-                <input type="text" name="mp_height" required>
+                <input type="text" name="mp_height">
             </div>
             <div>
                 <label>Touch off at bottom height:</label>
-                <input type="text" name="b_height" required>
+                <input type="text" name="b_height">
             </div>
-            <div class="children">
+            <!-- <div class="children">
                 <input type="checkbox" name="wick" width="30px">
                 <label>Wick side of container valid</label>
             </div>
             <div class="children">
-                <input type="checkbox" name="LLD">
+                <input type="checkbox" name="lld">
                 <label>Liquid level detect valid</label>
-            </div>
+            </div> -->
             <div>
                 <label>Liquid seeking height:</label>
-                <input type="text" name="LSH" required>
+                <input type="text" name="lsh">
             </div>
             <div>
                 <label>Capacitive LLD:</label>  
-                <select name="CLLD" required>
+                <select name="clld" >
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -140,6 +146,12 @@
         <h3>Rack Definition</h3>
         <details open>
             <summary></summary>
+            <div>
+                <label>Rack name:</label>
+                <select id="opt_racks" name="rack_name">
+                    <option> </option>
+                </select>
+            </div>
             <div class="subtitle">Type</div>
             <div>
                 <label for="plate">Microtiter plate</label>
@@ -149,7 +161,7 @@
                 <label for="irreg_rack">Irregular rack</label>
                 <input type="radio" name="type" id="irreg_rack" value="irreg_rack">
             </div>
-            <br>
+            <!-- <br>
             <div style="display:flex;flex-direction:row;gap:50px">
                 <div style="display:flex;justify-content:flex-start;">
                     <label>Include cover definition</label>
@@ -163,7 +175,7 @@
                         <label for="yes">Yes</label>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <br>
             <div class="subtitle">View (Optional)</div>
             <div>
@@ -191,7 +203,7 @@
                 <input type="text" name="low_width_y">
                 <label>Segment height:</label>
                 <input type="text" name="seg_height_y">
-            </div> -->
+            </div>
             <div class="subtitle">Format</div>
             <div>
                 <input type="radio" name="orientation" id="landscape" value="landscape">
@@ -207,7 +219,7 @@
                 <input type="radio" name="size" id="1536" value="1536">
                 <label for="1536">32 x 48 (1536)</label>
             </div>
-            <br>
+            <br> -->
             <div>
                 <label>Plate height:</label>
                 <input type="text" name="plate_height">mm
@@ -224,13 +236,26 @@
                 <input type="file" name="well_type" accept=".ctr" style="width:calc(75%)">
                 <br>
                 <label>Distance from base of plate to outer base of well:</label>
-                <input type="text" name="stack_height">mm
+                <input type="text" name="dist_bp_to_ob">mm<br>
+                <label>Distance between holes (per row):</label>
+                <input type="text" name="dist_bh">mm<br>
+                <label>Distance between rows:</label>
+                <input type="text" name="dist_br">mm<br>
+                <label>Left outer edge of rack:</label>
+                <input type="text" name="left_oe">mm<br>
+                <label>Front outer edge of rack:</label>
+                <input type="text" name="front_oe">mm<br>
+                <label>Width:</label>
+                <input type="text" name="width">mm<br>
+                <label>Length:</label>
+                <input type="text" name="length">mm
             </div>
         </details>
     </fieldset>
     <button type="submit">Finish</button>
   </form>
   </div>
+  <script src="container_rack_truth.js" type="text/javascript"></script>
   <script src="logic.js" type="text/javascript"></script>
   </body>
 </html>
