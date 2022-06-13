@@ -128,7 +128,7 @@ function evaluate(output, keyVals) {
 function changeOps(val, num) {
     // change image
     let img = document.getElementById(`shape_img${num}`)
-    img.src= `images/${val}.png`
+    img.src = `images/${val}.png`
     // change measurement options, segment 1
     if (num == 1) {
         let measBlock = document.getElementById("interMeasures1")
