@@ -1,5 +1,3 @@
-// could use sessionStorage to keep the form between switching pages
-
 init()
 
 function init() {
@@ -33,12 +31,9 @@ function init() {
     }, false)
 }
 
-// to do:
-// 4. see if tally is at 3, if so, send another message?
-// 5. add fun elements
+let tally = {}
 function process(output) {
     let contRackCombo = ""
-    let tally = {}
     applicableKeyVals = {}
 
     // if the user chose a container name
@@ -70,22 +65,27 @@ function process(output) {
     // keep track of how the user is doing
     let results = evaluate(output, applicableKeyVals)
     if (contRackCombo in tally) {
-        tally[contRackCombo] += results[0]
+        tally[contRackCombo] += Math.abs(results[0] - 1)
     }
     else {
-        tally[contRackCombo] = results[0]
+        tally[contRackCombo] = Math.abs(results[0] - 1)
     }
 
     // send user results
     if (results[0]) {
         alert(`Good job! All correct for ${contRackCombo}!`)
+        tally[contRackCombo] = 0
     }
     else {
-        let msg = `Oh no! These items were incorrect for ${contRackCombo}:\n`
+        let msg = `These items were incorrect for ${contRackCombo}:\n`
         for (const [incKey, incVal] of Object.entries(results[1])) {
             msg += `${incKey}: ${incVal}\n`
         }
         alert(msg)
+    }
+        
+    if (tally[contRackCombo] == 3) {
+        alert(`Oh no! You've used all 3 tries for ${contRackCombo}`)
     }
 }
 
@@ -102,16 +102,16 @@ function evaluate(output, keyVals) {
     for (const [key, trueValue] of Object.entries(keyVals)) {
         // if this require an exactly correct answer
         if (exact.includes(key) && trueValue == output[key]) {
-            console.log(`exact evaluation match ${key}: ${trueValue}`)
+            // console.log(`exact evaluation match ${key}: ${trueValue}`)
         }
         // if we can give 5% leeway on the answer
         else if ((trueValue >= output[key] * .95) &&
                 (trueValue <= output[key] * 1.05)) {
-            console.log(`inexact evaluation match ${key}: ${trueValue}`)
+            // console.log(`inexact evaluation match ${key}: ${trueValue}`)
         }
         // keep track of what was wrong and # tries for a container and rack pair
         else {
-            console.log(`no match ${key}: ${trueValue}`)
+            // console.log(`no match ${key}: ${trueValue}`)
             incorrectItems[key] = output[key]
             retVal[0] = 0
         }
