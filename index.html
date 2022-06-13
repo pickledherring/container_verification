@@ -9,146 +9,154 @@
     <form autocomplete="on">
       <fieldset>
         <h3>Container Definition</h3>
-        <details open>
+        <details id="container" open>
             <summary></summary>
-            <div>
-                <label>Container name:</label>
-                <select id="opt_conts" name="cont_name">
-                    <option> </option>
-                </select>
-            </div>
-            <div style="display:flex;flex-direction:row;gap:50px">
-                <div style="display:flex;flex-direction:column;justify-content:flex-start;">
+            <div style="display:flex;flex-direction:row;gap:50px;">
+                <div class="left_column">
                     <div>
-                        <label>Number of segments:</label>
-                        <input type="text" name="n_segs" >
+                        <label>Container name:</label>
+                        <select class="long_name" id="opt_conts" name="cont_name">
+                            <option> </option>
+                        </select>
+                    </div>
+                    <br>
+                    <div style="display:flex;flex-direction:row;gap:50px">
+                        <div style="display:flex;flex-direction:column;justify-content:flex-start;">
+                            <div>
+                                <label>Number of segments:</label>
+                                <input type="text" name="n_segs" >
+                            </div>
+                            <div>
+                                <label>Thickness of container base:</label>
+                                <input type="text" name="cb_thickness" > mm
+                            </div>
+                        </div>
+                            <div>
+                                <img src="images\vial_height.PNG" alt="start of new container wall angle marks new segment"></img>
+                            </div>
+                    </div>
+                    <br>
+                    <div>(Heights measured relative to inner base of container)</div>
+                    <div>
+                        <label>Clearance height:</label>
+                        <input type="text" name="c_height">
                     </div>
                     <div>
-                        <label>Thickness of container base:</label>
-                        <input type="text" name="cb_thickness" > mm
+                        <label>Maximum pipetting height:</label>
+                        <input type="text" name="mp_height">
+                    </div>
+                    <div>
+                        <label>Touch off at bottom height:</label>
+                        <input type="text" name="b_height">
+                    </div>
+                    <!-- <div class="children">
+                        <input type="checkbox" name="wick" width="30px">
+                        <label>Wick side of container valid</label>
+                    </div>
+                    <div class="children">
+                        <input type="checkbox" name="lld">
+                        <label>Liquid level detect valid</label>
+                    </div> -->
+                    <div>
+                        <label>Liquid seeking height:</label>
+                        <input type="text" name="lsh">
+                    </div>
+                    <div>
+                        <label>Capacitive LLD:</label>  
+                        <select name="clld" >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="subtitle">Segment 1</div>
+                    <div class="subtitle">Segment approximation</div>
+                    <div>
+                        <input type="radio" name="shape1" id="cyl" value="cylinder" onclick="changeOps(this.value, 1)">
+                        <label for="cyl">Cylinder</label>
+                        <input type="radio" name="shape1" id="rect" value="rectangle" onclick="changeOps(this.value, 1)">
+                        <label for="rect">Rectangle</label><br>
+                        <input type="radio" name="shape1" id="inv_cone" value="inverted_cone" onclick="changeOps(this.value, 1)">
+                        <label for="inv_cone">Inverted Cone</label>
+                        <input type="radio" name="shape1" id="v_cone" value="v_cone" onclick="changeOps(this.value, 1)">
+                        <label for="v_cone">V-Cone</label><br>
+                        <input type="radio" name="shape1" id="blank" value="blank" onclick="changeOps(this.value, 1)">
+                        <label for="blank">Leave Blank</label><br>
+                    </div>
+                    <br>
+                    <div style="display:flex;flex-direction:row;gap:50px">
+                        <div>
+                            <img id="shape_img1" src="images\blank.png" alt="container measurement diagram"></img>
+                        </div>
+                        <div id="interMeasures1" style="display:flex;flex-direction:column;justify-content:flex-start;">
+                            <div>
+                                <label>Upper Internal Diameter:</label>
+                                <input type="text" name="up_ID1">mm
+                            </div>
+                            <div>
+                                <label>Lower Internal Diameter:</label>
+                                <input type="text" name="low_ID1">mm
+                            </div>
+                            <div>
+                                <label>Internal Segment Height:</label>
+                                <input type="text" name="in_SH1">mm
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="subtitle">Segment 2</div>
+                    <div class="subtitle">Segment approximation</div>
+                    <div>
+                        <input type="radio" name="shape2" id="cyl2" value="cylinder" onclick="changeOps(this.value, 2)">
+                        <label for="cyl2">Cylinder</label>
+                        <input type="radio" name="shape2" id="rect2" value="rectangle" onclick="changeOps(this.value, 2)">
+                        <label for="rect2">Rectangle</label><br>
+                        <input type="radio" name="shape2" id="inv_cone2" value="inverted_cone" onclick="changeOps(this.value, 2)">
+                        <label for="inv_cone2">Inverted Cone</label>
+                        <input type="radio" name="shape2" id="v_cone2" value="v_cone" onclick="changeOps(this.value, 2)">
+                        <label for="v_cone2">V-Cone</label><br>
+                        <input type="radio" name="shape2" id="round_base2" value="round_base" onclick="changeOps(this.value, 2)">
+                        <label for="round_base2">Rounded base segment</label>
+                        <input type="radio" name="shape2" id="vc_base2" value="v_base" onclick="changeOps(this.value, 2)">
+                        <label for="vc_base2">V-Cone base segment</label><br>
+                        <input type="radio" name="shape2" id="blank2" value="blank" onclick="changeOps(this.value, 2)">
+                        <label for="blank2">Leave Blank</label><br>
+                    </div>
+                    <br>
+                    <div style="display:flex;flex-direction:row;gap:50px">
+                        <div>
+                            <img id=shape_img2 src="images\blank.png" alt="container measurement diagram"></img>
+                        </div>
+                        <div id="interMeasures2" style="display:flex;flex-direction:column;justify-content:flex-start;">
+                            <div>
+                                <label>Upper Internal Diameter:</label>
+                                <input type="text" name="up_ID2">mm
+                            </div>
+                            <div>
+                                <label>Lower Internal Diameter:</label>
+                                <input type="text" name="low_ID2">mm
+                            </div>
+                            <div>
+                                <label>Internal Segment Height:</label>
+                                <input type="text" name="in_SH2">mm
+                            </div>
+                        </div>
                     </div>
                 </div>
-                    <div>
-                        <img src="images\vial_height.PNG" alt="start of new container wall angle marks new segment"></img>
-                    </div>
-            </div>
-            <br>
-            <div>(Heights measured relative to inner base of container)</div>
-            <div>
-                <label>Clearance height:</label>
-                <input type="text" name="c_height">
-            </div>
-            <div>
-                <label>Maximum pipetting height:</label>
-                <input type="text" name="mp_height">
-            </div>
-            <div>
-                <label>Touch off at bottom height:</label>
-                <input type="text" name="b_height">
-            </div>
-            <!-- <div class="children">
-                <input type="checkbox" name="wick" width="30px">
-                <label>Wick side of container valid</label>
-            </div>
-            <div class="children">
-                <input type="checkbox" name="lld">
-                <label>Liquid level detect valid</label>
-            </div> -->
-            <div>
-                <label>Liquid seeking height:</label>
-                <input type="text" name="lsh">
-            </div>
-            <div>
-                <label>Capacitive LLD:</label>  
-                <select name="clld" >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-            <br>
-            <div class="subtitle">Segment 1</div>
-            <div class="subtitle">Segment approximation</div>
-            <div>
-                <input type="radio" name="shape1" id="cyl" value="cylinder" onclick="changeOps(this.value, 1)">
-                <label for="cyl">Cylinder</label>
-                <input type="radio" name="shape1" id="rect" value="rectangle" onclick="changeOps(this.value, 1)">
-                <label for="rect">Rectangle</label><br>
-                <input type="radio" name="shape1" id="inv_cone" value="inverted_cone" onclick="changeOps(this.value, 1)">
-                <label for="inv_cone">Inverted Cone</label>
-                <input type="radio" name="shape1" id="v_cone" value="v_cone" onclick="changeOps(this.value, 1)">
-                <label for="v_cone">V-Cone</label><br>
-                <input type="radio" name="shape1" id="blank" value="blank" onclick="changeOps(this.value, 1)">
-                <label for="blank">Leave Blank</label><br>
-            </div>
-            <br>
-            <div style="display:flex;flex-direction:row;gap:50px">
-                <div>
-                    <img id="shape_img1" src="images\blank.png" alt="container measurement diagram"></img>
-                </div>
-                <div id="interMeasures1" style="display:flex;flex-direction:column;justify-content:flex-start;">
-                    <div>
-                        <label>Upper Internal Diameter:</label>
-                        <input type="text" name="up_ID1">mm
-                    </div>
-                    <div>
-                        <label>Lower Internal Diameter:</label>
-                        <input type="text" name="low_ID1">mm
-                    </div>
-                    <div>
-                        <label>Internal Segment Height:</label>
-                        <input type="text" name="in_SH1">mm
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="subtitle">Segment 2</div>
-            <div class="subtitle">Segment approximation</div>
-            <div>
-                <input type="radio" name="shape2" id="cyl2" value="cylinder" onclick="changeOps(this.value, 2)">
-                <label for="cyl2">Cylinder</label>
-                <input type="radio" name="shape2" id="rect2" value="rectangle" onclick="changeOps(this.value, 2)">
-                <label for="rect2">Rectangle</label><br>
-                <input type="radio" name="shape2" id="inv_cone2" value="inverted_cone" onclick="changeOps(this.value, 2)">
-                <label for="inv_cone2">Inverted Cone</label>
-                <input type="radio" name="shape2" id="v_cone2" value="v_cone" onclick="changeOps(this.value, 2)">
-                <label for="v_cone2">V-Cone</label><br>
-                <input type="radio" name="shape2" id="round_base2" value="round_base" onclick="changeOps(this.value, 2)">
-                <label for="round_base2">Rounded base segment</label>
-                <input type="radio" name="shape2" id="vc_base2" value="v_base" onclick="changeOps(this.value, 2)">
-                <label for="vc_base2">V-Cone base segment</label><br>
-                <input type="radio" name="shape2" id="blank2" value="blank" onclick="changeOps(this.value, 2)">
-                <label for="blank2">Leave Blank</label><br>
-            </div>
-            <br>
-            <div style="display:flex;flex-direction:row;gap:50px">
-                <div>
-                    <img id=shape_img2 src="images\blank.png" alt="container measurement diagram"></img>
-                </div>
-                <div id="interMeasures2" style="display:flex;flex-direction:column;justify-content:flex-start;">
-                    <div>
-                        <label>Upper Internal Diameter:</label>
-                        <input type="text" name="up_ID2">mm
-                    </div>
-                    <div>
-                        <label>Lower Internal Diameter:</label>
-                        <input type="text" name="low_ID2">mm
-                    </div>
-                    <div>
-                        <label>Internal Segment Height:</label>
-                        <input type="text" name="in_SH2">mm
-                    </div>
+                <div class="right_column">
+                    <img class="bg" src="images/beach2.png">
                 </div>
             </div>
         </details>
         <h3>Rack Definition</h3>
-        <details open>
+        <details id="rack" open>
             <summary></summary>
             <div>
                 <label>Rack name:</label>
-                <select id="opt_racks" name="rack_name">
+                <select class="long_name" id="opt_racks" name="rack_name">
                     <option> </option>
                 </select>
             </div>
@@ -180,75 +188,82 @@
             <div class="subtitle">View (Optional)</div>
             <div>
                 <label>Name:</label>
-                <input type="text" name="name" style="width:calc(75%);"><br>
+                <input type="text" name="name" class="long_name"><br>
                 <label>Description:</label>
-                <input type="text" name="description" style="width:calc(75%);">
+                <input type="text" name="description" class="long_name">
             </div>
-            <br>
-            <div class="subtitle">X-axis Rack Geometry</div>
-            <div>
-                <label>Upper width:</label>
-                <input type="text" name="up_width_x">
-                <label>Lower width:</label>
-                <input type="text" name="low_width_x">
-                <label>Segment height:</label>
-                <input type="text" name="seg_height_x">
-            </div>
-            <br>
-            <!-- <div class="subtitle">Y-axis Rack Geometry</div>
-            <div>
-                <label>Upper width:</label>
-                <input type="text" name="up_width_y">
-                <label>Lower width:</label>
-                <input type="text" name="low_width_y">
-                <label>Segment height:</label>
-                <input type="text" name="seg_height_y">
-            </div>
-            <div class="subtitle">Format</div>
-            <div>
-                <input type="radio" name="orientation" id="landscape" value="landscape">
-                <label for="landscape">Landscape</label>
-                <input type="radio" name="orientation" id="portrait" value="portrait">
-                <label for="portrait">Portrait</label>
-            </div>
-            <div>
-                <input type="radio" name="size" id="96" value="96">
-                <label for="96">8 x 12 (96)</label>
-                <input type="radio" name="size" id="384" value="384">
-                <label for="384">16 x 24 (384)</label>
-                <input type="radio" name="size" id="1536" value="1536">
-                <label for="1536">32 x 48 (1536)</label>
-            </div>
-            <br> -->
-            <div>
-                <label>Plate height:</label>
-                <input type="text" name="plate_height">mm
-            <br>
-                <label>Plate clearance height:</label>
-                <input type="text" name="plate_ch">mm
-            <br>
-                <label>Stack height:</label>
-                <input type="text" name="stack_height">mm
-            </div>
-            <br> 
-            <div class="subtitle">Well Type</div>
-            <div>
-                <input type="file" name="well_type" accept=".ctr" style="width:calc(75%)">
-                <br>
-                <label>Distance from base of plate to outer base of well:</label>
-                <input type="text" name="dist_bp_to_ob">mm<br>
-                <label>Distance between holes (per row):</label>
-                <input type="text" name="dist_bh">mm<br>
-                <label>Distance between rows:</label>
-                <input type="text" name="dist_br">mm<br>
-                <label>Left outer edge of rack:</label>
-                <input type="text" name="left_oe">mm<br>
-                <label>Front outer edge of rack:</label>
-                <input type="text" name="front_oe">mm<br>
-                <label>Width:</label>
-                <input type="text" name="width">mm<br>
-                <label>Length:</label>
-                <input type="text" name="length">mm
+            <div style="display:flex;flex-direction:row;gap:20px;">
+                <div class="left_column">
+                    <br>
+                    <div class="subtitle">X-axis Rack Geometry</div>
+                    <div>
+                        <label>Upper width:</label>
+                        <input type="text" name="up_width_x">
+                        <label>Lower width:</label>
+                        <input type="text" name="low_width_x">
+                        <label>Segment height:</label>
+                        <input type="text" name="seg_height_x">
+                    </div>
+                    <br>
+                    <!-- <div class="subtitle">Y-axis Rack Geometry</div>
+                    <div>
+                        <label>Upper width:</label>
+                        <input type="text" name="up_width_y">
+                        <label>Lower width:</label>
+                        <input type="text" name="low_width_y">
+                        <label>Segment height:</label>
+                        <input type="text" name="seg_height_y">
+                    </div>
+                    <div class="subtitle">Format</div>
+                    <div>
+                        <input type="radio" name="orientation" id="landscape" value="landscape">
+                        <label for="landscape">Landscape</label>
+                        <input type="radio" name="orientation" id="portrait" value="portrait">
+                        <label for="portrait">Portrait</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="size" id="96" value="96">
+                        <label for="96">8 x 12 (96)</label>
+                        <input type="radio" name="size" id="384" value="384">
+                        <label for="384">16 x 24 (384)</label>
+                        <input type="radio" name="size" id="1536" value="1536">
+                        <label for="1536">32 x 48 (1536)</label>
+                    </div>
+                    <br> -->
+                    <div>
+                        <label>Plate height:</label>
+                        <input type="text" name="plate_height">mm
+                    <br>
+                        <label>Plate clearance height:</label>
+                        <input type="text" name="plate_ch">mm
+                    <br>
+                        <label>Stack height:</label>
+                        <input type="text" name="stack_height">mm
+                    </div>
+                    <br> 
+                    <div class="subtitle">Well Type</div>
+                    <div>
+                        <input type="file" name="well_type" accept=".ctr" style="width:calc(75%)">
+                        <br>
+                        <label>Distance from base of plate to outer base of well:</label>
+                        <input type="text" name="dist_bp_to_ob">mm<br>
+                        <label>Distance between holes (per row):</label>
+                        <input type="text" name="dist_bh">mm<br>
+                        <label>Distance between rows:</label>
+                        <input type="text" name="dist_br">mm<br>
+                        <label>Left outer edge of rack:</label>
+                        <input type="text" name="left_oe">mm<br>
+                        <label>Front outer edge of rack:</label>
+                        <input type="text" name="front_oe">mm<br>
+                        <label>Width:</label>
+                        <input type="text" name="width">mm<br>
+                        <label>Length:</label>
+                        <input type="text" name="length">mm
+                    </div>
+                </div>
+                <div class="right_column">
+                    <img class="bg" src="images/cat_chair.jpg">
+                </div>
             </div>
         </details>
     </fieldset>

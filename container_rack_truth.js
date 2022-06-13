@@ -15,7 +15,6 @@
    "in_SH1": 40.2,
    "shape2": "v_base",
    "up_ID2": 8.2,
-   "low_ID2": null,
    "in_SH2": 4.45
  },
  "CTR_2_5mL_Sartstedt_60_614_010_PPD_V1":
@@ -41,7 +40,7 @@
 let rack_truth =
 {
   "SMP_CAR_32_2mLSarstedt_A00":{
-    "desc": "Sample carrier with 32 positions with preloaded 2.0mL Sarstedt Tubes ",
+    // "desc": "Sample carrier with 32 positions with preloaded 2.0mL Sarstedt Tubes ",
     "type": "reg_rack",
     "up_width_x": 22.5,
     "low_width_x": 22.5,
@@ -59,7 +58,7 @@ let rack_truth =
     "length": 497
   },
   "SMP_CAR_32_2_5mL_Sarstedt_60_614_010_PPD_V1.rck":{
-    "rack_desc": "Sample carrier with 32 positions with preloaded 2.0mL Sarstedt Tubes",
+    // "desc": "Sample carrier with 32 positions with preloaded 2.0mL Sarstedt Tubes",
     "type": "reg_rack",
     "up_width_x": 22.5,
     "low_width_x": 22.5,

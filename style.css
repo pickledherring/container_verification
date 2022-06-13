@@ -33,9 +33,36 @@ fieldset {
     border: none;
 }
 
-.subtitle {
-    color: #7ab424
+.left_column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-grow: 2;
 }
+
+@media only screen and (max-width: 730px) {
+    .bg {
+        display: none !important;
+    }
+}
+
+.bg {
+    margin-top: 10px;
+    max-width: 90%;
+    max-height: 800px;
+}
+
+.right_column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.long_name {
+    width: 75%;
+    max-width: 500px;
+}
+
 
 input {
     padding: 0px;

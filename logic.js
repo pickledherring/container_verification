@@ -34,40 +34,93 @@ function init() {
 }
 
 // to do:
-// 1. add segment field use logic (if n_segs == 1, ignore seg 2)
-// 2. extend to rack
-// 3. send a message with results, tally attempt if failed
 // 4. see if tally is at 3, if so, send another message?
 // 5. add fun elements
 function process(output) {
-    // console.log("output w key:", output["n_segs"])
-    // for (const [key, value] of Object.entries(output)) {
-    //         console.log(key, value)
-    //     }
+    let contRackCombo = ""
+    let tally = {}
+    applicableKeyVals = {}
 
+    // if the user chose a container name
+    if (output.cont_name) {
+        for (const [key, trueValue] of Object.entries(cont_truth[output.cont_name])) {
+            applicableKeyVals[key] = trueValue
+        }
+        contRackCombo = output.cont_name
+    }
+    
+    // if a rack name was chosen
+    if (output.rack_name) {
+        for (const [key, trueValue] of Object.entries(rack_truth[output.rack_name])) {
+            applicableKeyVals[key] = trueValue
+        }
+        
+        if (contRackCombo.length > 0) {
+            contRackCombo += ` and ${output.rack_name}`
+        }
+        else
+            contRackCombo = output.rack_name
+    }
+
+    // if they chose neither
+    if (output.cont_name == " " && output.rack_name == " ") {
+        alert("Please choose a container, rack, or both")
+    }
+
+    // keep track of how the user is doing
+    let results = evaluate(output, applicableKeyVals)
+    if (contRackCombo in tally) {
+        tally[contRackCombo] += results[0]
+    }
+    else {
+        tally[contRackCombo] = results[0]
+    }
+
+    // send user results
+    if (results[0]) {
+        alert(`Good job! All correct for ${contRackCombo}!`)
+    }
+    else {
+        let msg = `Oh no! These items were incorrect for ${contRackCombo}:\n`
+        for (const [incKey, incVal] of Object.entries(results[1])) {
+            msg += `${incKey}: ${incVal}\n`
+        }
+        alert(msg)
+    }
+}
+
+// iterates through list of true key value pairs and evaluates against output
+function evaluate(output, keyVals) {
     // array of fields that need to be exact
     let exact = ["n_segs", "shape1", "shape2", "type"]
+    let incorrectItems = {}
+    let retVal = [1]
+    // let rackItems = ["type", "up_width_x", "low_width_x", "seg_height_x", "plate_height",
+    //                 "plate_ch", "stack_height", "dist_bp_to_ob", "dist_bh", "dist_br",
+    //                 "left_oe", "front_oe", "width", "length"]
 
-    // container evaluation
-    if ((output.cont_name) && output.cont_name in cont_truth) {
-        for (const [key, trueValue] of Object.entries(cont_truth[output.cont_name])) {
-            if (exact.includes(key) && trueValue == output[key]) {
-                console.log(`exact evalutaion match ${key}: ${trueValue}`)
-            }
-            else if ((trueValue >= output[key] * .95) &&
-                    (trueValue <= output[key] * 1.05)) {
-                console.log(`inexact evaluation match ${key}: ${trueValue}`)
-            }
-            else {
-                console.log(`no match ${key}: ${trueValue}`)
-            }
+    for (const [key, trueValue] of Object.entries(keyVals)) {
+        // if this require an exactly correct answer
+        if (exact.includes(key) && trueValue == output[key]) {
+            console.log(`exact evaluation match ${key}: ${trueValue}`)
         }
-    
-    // rack evaluation
+        // if we can give 5% leeway on the answer
+        else if ((trueValue >= output[key] * .95) &&
+                (trueValue <= output[key] * 1.05)) {
+            console.log(`inexact evaluation match ${key}: ${trueValue}`)
+        }
+        // keep track of what was wrong and # tries for a container and rack pair
+        else {
+            console.log(`no match ${key}: ${trueValue}`)
+            incorrectItems[key] = output[key]
+            retVal[0] = 0
+        }
     }
-    if ((output.rack_name) && output.rack_name in rack_truth) {
-        console.log(rack_truth[output.rack_name])
-    }
+
+    // retVal[0] = 0 or 1
+    // 0 is falsy and indicates the user failed, 1 is truthy and indicates the user passed
+    retVal[1] = incorrectItems
+    return retVal
 }
 
 // changes the image and measurement options in the "segment approximation"
