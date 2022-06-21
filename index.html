@@ -74,7 +74,7 @@
                     <br>
                     <div class="subtitle">Segment 1</div>
                     <div class="subtitle">Segment approximation</div>
-                    <div>
+                    <div name="shape1">
                         <input type="radio" name="shape1" id="cyl" value="cylinder" onclick="changeOps(this.value, 1)">
                         <label for="cyl">Cylinder</label>
                         <input type="radio" name="shape1" id="rect" value="rectangle" onclick="changeOps(this.value, 1)">
@@ -109,7 +109,7 @@
                     <br>
                     <div class="subtitle">Segment 2</div>
                     <div class="subtitle">Segment approximation</div>
-                    <div>
+                    <div name="shape2">
                         <input type="radio" name="shape2" id="cyl2" value="cylinder" onclick="changeOps(this.value, 2)">
                         <label for="cyl2">Cylinder</label>
                         <input type="radio" name="shape2" id="rect2" value="rectangle" onclick="changeOps(this.value, 2)">
@@ -160,40 +160,32 @@
                     <option> </option>
                 </select>
             </div>
-            <div class="subtitle">Type</div>
-            <div>
-                <label for="plate">Microtiter plate</label>
-                <input type="radio" name="type" id="plate" value="plate"><br>
-                <label for="reg_rack">Regular rectangular rack</label>
-                <input type="radio" name="type" id="reg_rack" value="reg_rack"><br>
-                <label for="irreg_rack">Irregular rack</label>
-                <input type="radio" name="type" id="irreg_rack" value="irreg_rack">
-            </div>
-            <!-- <br>
-            <div style="display:flex;flex-direction:row;gap:50px">
-                <div style="display:flex;justify-content:flex-start;">
-                    <label>Include cover definition</label>
-                    <input type="checkbox" name="inc_cov_def">
-                </div>
-                <div style="display:flex;flex-direction:row;justify-content:flex-start;">
-                    <div>Visible by default
-                        <input type="radio" name="vis_default" id="no" value="no">
-                        <label for="no">No</label>
-                        <input type="radio" name="vis_default" id="yes" value="yes">
-                        <label for="yes">Yes</label>
-                    </div>
-                </div>
-            </div> -->
-            <br>
-            <div class="subtitle">View (Optional)</div>
-            <div>
-                <label>Name:</label>
-                <input type="text" name="name" class="long_name"><br>
-                <label>Description:</label>
-                <input type="text" name="description" class="long_name">
-            </div>
             <div style="display:flex;flex-direction:row;gap:20px;">
                 <div class="left_column">
+                    <div class="subtitle">Type</div>
+                    <div name="type">
+                        <label for="plate">Microtiter plate</label>
+                        <input type="radio" name="type" id="plate" value="plate"><br>
+                        <label for="reg_rack">Regular rectangular rack</label>
+                        <input type="radio" name="type" id="reg_rack" value="reg_rack"><br>
+                        <label for="irreg_rack">Irregular rack</label>
+                        <input type="radio" name="type" id="irreg_rack" value="irreg_rack">
+                    </div>
+                    <!-- <br>
+                    <div style="display:flex;flex-direction:row;gap:50px">
+                        <div style="display:flex;justify-content:flex-start;">
+                            <label>Include cover definition</label>
+                            <input type="checkbox" name="inc_cov_def">
+                        </div>
+                        <div style="display:flex;flex-direction:row;justify-content:flex-start;">
+                            <div>Visible by default
+                                <input type="radio" name="vis_default" id="no" value="no">
+                                <label for="no">No</label>
+                                <input type="radio" name="vis_default" id="yes" value="yes">
+                                <label for="yes">Yes</label>
+                            </div>
+                        </div>
+                    </div> -->
                     <br>
                     <div class="subtitle">X-axis Rack Geometry</div>
                     <div>
@@ -241,10 +233,7 @@
                         <input type="text" name="stack_height">mm
                     </div>
                     <br> 
-                    <div class="subtitle">Well Type</div>
                     <div>
-                        <input type="file" name="well_type" accept=".ctr" style="width:calc(75%)">
-                        <br>
                         <label>Distance from base of plate to outer base of well:</label>
                         <input type="text" name="dist_bp_to_ob">mm<br>
                         <label>Distance between holes (per row):</label>

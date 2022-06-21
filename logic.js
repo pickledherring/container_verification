@@ -18,21 +18,27 @@ function init() {
     // get form submission
     let form = document.querySelector("form")
     form.addEventListener("submit", function(event) {
-    let formData = new FormData(form)
-    let output = {}
-    for (const entry of formData) {
-        output[`${entry[0]}`] = entry[1]
-    }
-
-    // should prevent a page refresh on submission
-    event.preventDefault()
-    // form evaluation logic
-    process(output)
+        let formData = new FormData(form)
+        let output = {}
+        for (const entry of formData) {
+            output[`${entry[0]}`] = entry[1]
+        }
+        
+        // should prevent a page refresh on submission
+        event.preventDefault()
+        // form evaluation logic
+        process(output)
     }, false)
 }
 
 let tally = {}
 function process(output) {
+    // clear highlighting
+    let allNamed = document.querySelectorAll(`input, select, div[name='shape1'],
+                                        div[name='shape2'], div[name='type']`)
+    allNamed.forEach(elem => elem.style.backgroundColor = '')
+
+    // make a name for the combination of the chosen container and rack
     let contRackCombo = ""
     applicableKeyVals = {}
 
@@ -77,11 +83,14 @@ function process(output) {
         tally[contRackCombo] = 0
     }
     else {
-        let msg = `These items were incorrect for ${contRackCombo}:\n`
+        alert(`Attempt number ${tally[contRackCombo]} for ${contRackCombo}!\n
+                The highlighted fields are incorrect`)
+        
+        // highlight incorrect fields
         for (const [incKey, incVal] of Object.entries(results[1])) {
-            msg += `${incKey}: ${incVal}\n`
+            let elems = document.getElementsByName(incKey)
+            elems.forEach(elem => elem.style.backgroundColor = "#FDFF47")
         }
-        alert(msg)
     }
         
     if (tally[contRackCombo] == 3) {
@@ -100,18 +109,17 @@ function evaluate(output, keyVals) {
     //                 "left_oe", "front_oe", "width", "length"]
 
     for (const [key, trueValue] of Object.entries(keyVals)) {
-        // if this require an exactly correct answer
-        if (exact.includes(key) && trueValue == output[key]) {
-            // console.log(`exact evaluation match ${key}: ${trueValue}`)
+        // if this requires an exactly correct answer
+        if (exact.includes(key)) {
+            if (trueValue != output[key]) {
+                // track what was wrong and # tries for a container and rack pair
+                incorrectItems[key] = output[key]
+                retVal[0] = 0
+            }
         }
         // if we can give 5% leeway on the answer
-        else if ((trueValue >= output[key] * .95) &&
-                (trueValue <= output[key] * 1.05)) {
-            // console.log(`inexact evaluation match ${key}: ${trueValue}`)
-        }
-        // keep track of what was wrong and # tries for a container and rack pair
-        else {
-            // console.log(`no match ${key}: ${trueValue}`)
+        else if ((trueValue < output[key] * .95) ||
+                (trueValue > output[key] * 1.05)) {
             incorrectItems[key] = output[key]
             retVal[0] = 0
         }
