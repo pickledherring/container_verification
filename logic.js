@@ -130,32 +130,32 @@ function addContRack(output, contOrRack) {
     let newText = ''
     
     if (contOrRack == "container") {
-        text = "let cont_truth =\n" + JSON.stringify(cont_truth).slice(0, -1)
-        newText += `,\n"${name}":\n{\n"n_segs": ${output["n_segs"]}`
+        text = "let cont_truth =\n" + JSON.stringify(cont_truth, null, 4).slice(0, -2)
+        newText += `,\n\t"${name}":{\n\t\t"n_segs": ${output["n_segs"]}`
         for (const [key, value] of Object.entries(output)) {
             if (!rackFields.includes(key) && !(key == "cont_name")
                 && !(key == "n_segs")) {
                 if (key == "shape1" || key == "shape2") {
-                    newText += `,\n"${key}": "${value}"`
+                    newText += `,\n\t\t"${key}": "${value}"`
                 }
                 else {
-                    newText += `,\n"${key}": ${value}`
+                    newText += `,\n\t\t"${key}": ${value}`
                 }
             }
         }
-        newText += "\n}"
+        newText += "\n\t}"
         link = document.getElementById('cont_download')
     }
     else {
-        text = "let rack_truth =\n" + JSON.stringify(rack_truth).slice(0, -1)
-        newText += `,\n"${name}":\n{\n"type": "${output["type"]}"`
+        text = "let rack_truth =\n" + JSON.stringify(rack_truth, null, 4).slice(0, -2)
+        newText += `,\n\t"${name}":\n\t\t"type": "${output["type"]}"`
         for (const [key, value] of Object.entries(output)) {
             if (rackFields.includes(key) && !(key == "rack_name")
                 && !(key == "type")) {
-                newText += `,\n"${key}": ${value}`
+                newText += `,\n\t\t"${key}": ${value}`
             }
         }
-        newText += "\n}"
+        newText += "\n\t}"
         link = document.getElementById('rack_download')
     }
     text += newText + "\n}"
@@ -288,8 +288,6 @@ function volumes() {
     let vol2 = Math.round((getVols(shape2, 2) + Number.EPSILON) * 100) / 100
     let total = Math.round(vol1 + vol2)
 
-    console.log(`shape1, shape2: ${shape1}, ${shape2}`)
-    console.log(`vol1, vol2, total: ${vol1}, ${vol2}, ${total}`)
     document.getElementById("vol1").innerHTML = `Volume: ${vol1} mm<sup>3</sup>`
     document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup>`
     document.getElementById("total_vol").innerHTML = `Total Volume: ${total} mm<sup>3</sup>`
