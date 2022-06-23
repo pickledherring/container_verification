@@ -1,4 +1,6 @@
 init()
+let tally = {}
+var textFile = null
 
 function init() {
     // populate name drop downs, cont/rack_truth obtained from
@@ -31,13 +33,25 @@ function init() {
     }, false)
 }
 
-let tally = {}
 function process(output) {
     // clear highlighting
     let allNamed = document.querySelectorAll(`input, select, div[name='shape1'],
                                         div[name='shape2'], div[name='type']`)
     allNamed.forEach(elem => elem.style.backgroundColor = '')
 
+    submit_type = document.getElementById("submit_type")
+    if (submit_type.value == "evaluate") {
+        evaluate(output)
+    }
+    else if (submit_type.value == "add_container") {
+        addContRack(output, "container")
+    }
+    else {
+        addContRack(output, "rack")
+    }
+}
+
+function evaluate(output) {
     // make a name for the combination of the chosen container and rack
     let contRackCombo = ""
     applicableKeyVals = {}
@@ -68,8 +82,10 @@ function process(output) {
         alert("Please choose a container, rack, or both")
     }
 
+    // compute results
+    let results = checkVals(output, applicableKeyVals)
+
     // keep track of how the user is doing
-    let results = evaluate(output, applicableKeyVals)
     if (contRackCombo in tally) {
         tally[contRackCombo] += Math.abs(results[0] - 1)
     }
@@ -98,8 +114,58 @@ function process(output) {
     }
 }
 
+function addContRack(output, contOrRack) {
+    // make a name for the combination of the chosen container and rack
+    let name = prompt(`Values for this ${contOrRack} will be filled in
+                    from the applicable section of the form.\n
+                    What is the name of the ${contOrRack} (no quotes)?`)
+    // let another = prompt(`Would you like to enter another ${contOrRack} (y/n)?
+    //                     If yes, your download will be available after the next
+    //                     ${contOrRack} submission and answer "n" to this prompt`)
+    
+    rackFields = ["rack_name", "up_width_x", "low_width_x", "seg_height_x",
+    "plate_height", "plate_ch", "stack_height", "dist_bp_to_ob",
+    "dist_bh", "dist_br", "left_oe", "front_oe", "width", "length"]
+    let text = ''
+    let newText = ''
+    
+    if (contOrRack == "container") {
+        text = "let cont_truth =\n" + JSON.stringify(cont_truth).slice(0, -1)
+        newText += `,\n"${name}":\n{\n"n_segs": ${output["n_segs"]}`
+        for (const [key, value] of Object.entries(output)) {
+            if (!rackFields.includes(key) && !(key == "cont_name")
+                && !(key == "n_segs")) {
+                newText += `,\n"${key}": ${value}`
+            }
+        }
+        newText += "\n}"
+        link = document.getElementById('cont_download')
+    }
+    else {
+        text = "let rack_truth =\n" + JSON.stringify(rack_truth).slice(0, -1)
+        newText += `,\n"${name}":\n{\n"type": ${output["type"]}`
+        for (const [key, value] of Object.entries(output)) {
+            if (rackFields.includes(key) && !(key == "rack_name")
+                && !(key == "type")) {
+                newText += `,\n"${key}": ${value}`
+            }
+        }
+        newText += "\n}"
+        link = document.getElementById('rack_download')
+    }
+    text += newText + "\n}"
+    let data = new Blob([text], {type: 'text/plain'})
+
+    // If we are replacing a previously generated file we need to
+    // manually revoke the object URL to avoid memory leaks.
+    if (textFile !== null) {window.URL.revokeObjectURL(textFile)}
+    textFile = window.URL.createObjectURL(data)
+    link.href = textFile
+    link.style.display = 'block'
+}
+
 // iterates through list of true key value pairs and evaluates against output
-function evaluate(output, keyVals) {
+function checkVals(output, keyVals) {
     // array of fields that need to be exact
     let exact = ["n_segs", "shape1", "shape2", "type"]
     let incorrectItems = {}
@@ -137,6 +203,11 @@ function changeOps(val, num) {
     // change image
     let img = document.getElementById(`shape_img${num}`)
     img.src = `images/${val}.png`
+
+    // !!!!!!!!!!!!!!!!!
+    // add onChanges to these to calculate volumes
+    // !!!!!!!!!!!!!!!!!
+    
     // change measurement options, segment 1
     if (num == 1) {
         let measBlock = document.getElementById("interMeasures1")
@@ -145,11 +216,11 @@ function changeOps(val, num) {
                 measBlock.innerHTML = 
                 `<div>
                     <label>Upper Internal Diameter:</label>
-                    <input type="text" name="up_ID1">mm
+                    <input type="text" id="up_ID1" name="up_ID1" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Internal Segment Height:</label>
-                    <input type="text" name="in_SH1">mm
+                    <input type="text" id="in_SH1" name="in_SH1" onchange="volumes()">mm
                 </div>`
                 break}
 
@@ -157,15 +228,15 @@ function changeOps(val, num) {
                 measBlock.innerHTML = 
                 `<div>
                     <label>Width:</label>
-                    <input type="text" name="width1">mm
+                    <input type="text" id="width1" name="width1" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Length:</label>
-                    <input type="text" name="length1">mm
+                    <input type="text" id="length1" name="length1" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Internal Segment Height:</label>
-                    <input type="text" name="in_SH1">mm
+                    <input type="text" id="in_SH1" name="in_SH1" onchange="volumes()">mm
                 </div>`
                 break}
 
@@ -174,15 +245,15 @@ function changeOps(val, num) {
                 measBlock.innerHTML =
                 `<div>
                     <label>Upper Internal Diameter:</label>
-                    <input type="text" name="up_ID1">mm
+                    <input type="text" id="up_ID1" name="up_ID1" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Lower Internal Diameter:</label>
-                    <input type="text" name="low_ID1">mm
+                    <input type="text" id="low_ID1" name="low_ID1" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Internal Segment Height:</label>
-                    <input type="text" name="in_SH1">mm
+                    <input type="text" id="in_SH1" name="in_SH1">mm
                 </div>`
                 break}
         }
@@ -195,11 +266,11 @@ function changeOps(val, num) {
                 measBlock.innerHTML = 
                 `<div>
                     <label>Upper Internal Diameter:</label>
-                    <input type="text" name="up_ID2">mm
+                    <input type="text" id="up_ID2" name="up_ID2" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Internal Segment Height:</label>
-                    <input type="text" name="in_SH2">mm
+                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
                 </div>`
                 break}
 
@@ -207,15 +278,15 @@ function changeOps(val, num) {
                 measBlock.innerHTML = 
                 `<div>
                     <label>Width:</label>
-                    <input type="text" name="width2">mm
+                    <input type="text" id="width2" name="width2" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Length:</label>
-                    <input type="text" name="length2">mm
+                    <input type="text" id="length2" name="length2" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Internal Segment Height:</label>
-                    <input type="text" name="in_SH2">mm
+                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
                 </div>`
                 break}
 
@@ -224,15 +295,15 @@ function changeOps(val, num) {
                 measBlock.innerHTML =
                 `<div>
                     <label>Upper Internal Diameter:</label>
-                    <input type="text" name="up_ID2">mm
+                    <input type="text" id"up_ID2" name="up_ID2" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Lower Internal Diameter:</label>
-                    <input type="text" name="low_ID2">mm
+                    <input type="text" id="low_ID2" name="low_ID2" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Internal Segment Height:</label>
-                    <input type="text" name="in_SH2">mm
+                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
                 </div>`
                 break}
 
@@ -241,13 +312,99 @@ function changeOps(val, num) {
                 measBlock.innerHTML =
                 `<div>
                     <label>Upper Internal Diameter:</label>
-                    <input type="text" name="up_ID2">mm
+                    <input type="text" id"up_ID2" name="up_ID2" onchange="volumes()">mm
                 </div>
                 <div>
                     <label>Internal Segment Height:</label>
-                    <input type="text" name="in_SH2">mm
+                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
                 </div>`
                 break}
         }
     }
+}
+
+function volumes() {
+    let shape1Children = document.querySelectorAll("#shape1 > input")
+    let shape2Children = document.querySelectorAll("#shape2 > input")
+    let shape1 = 'blank'
+    let shape2 = 'blank'
+    for (elem of shape1Children) {
+        if (elem.checked) {shape1 = elem.value}
+    }
+    for (elem of shape2Children) {
+        if (elem.checked) {shape2 = elem.value}
+    }
+    let vol1 = getVols(shape1, 1)
+    let vol2 = getVols(shape2, 2)
+    let total = vol1 + vol2
+    document.getElementById("vol1").innerHTML = `Volume: ${vol1} mm<sup>3</sup>`
+    document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup>`
+    document.getElementById("total_vol").innerHTML = `Volume: ${total} mm<sup>3</sup>`
+}
+
+function getVols(shape, segment) {
+    switch(shape) {
+        case "rectangle": {
+            let width = 0
+            let length = 0
+            let in_SH = 0
+            try {
+                width = document.getElementById(`width${segment}`).value
+                length = document.getElementById(`length${segment}`).value
+                in_SH = document.getElementById(`in_SH${segment}`).value
+            } catch (error) {
+                return 0
+            }
+
+            return width * length * in_SH
+        }
+
+        case "cylinder": {
+            let up_ID = 0
+            let in_SH = 0
+            try {
+                up_ID = document.getElementById(`up_ID${segment}`).value
+                in_SH = document.getElementById(`in_SH${segment}`).value
+            } catch (error) {
+                return 0
+            }
+
+            return Math.PI * Math.pow(up_ID / 2, 2) * in_SH
+        }
+
+        case "inverted_cone":
+        case "v_cone": {
+            let up_ID = 0
+            let low_ID = 0
+            let in_SH = 0
+            try {
+                up_ID = document.getElementById(`up_ID${segment}`).value
+                low_ID = document.getElementById(`low_ID${segment}`).value
+                in_SH = document.getElementById(`in_SH${segment}`).value
+            } catch (error) {
+                return 0
+            }
+            
+            return Math.PI * in_SH * (Math.pow(up_ID / 2, 2) +
+                    Math.pow(low_ID / 2, 2) + up_ID * low_ID) / 3
+        }
+        
+        case "blank":
+        case "round_base": {
+            return 0
+        }
+
+        case "v_base": {
+            let up_ID = 0
+            let in_SH = 0
+            try {
+                up_ID = document.getElementById(`up_ID${segment}`).value
+                in_SH = document.getElementById(`in_SH${segment}`).value
+            } catch (error) {
+                return 0
+            }
+
+            return Math.PI * in_SH * Math.pow(up_ID / 2, 2) / 3
+        }
+    } 
 }

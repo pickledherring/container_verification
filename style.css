@@ -33,13 +33,6 @@ fieldset {
     border: none;
 }
 
-.left_column {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    flex-grow: 2;
-}
-
 @media only screen and (max-width: 730px) {
     .bg {
         display: none !important;
@@ -50,6 +43,13 @@ fieldset {
     margin-top: 10px;
     max-width: 90%;
     max-height: 800px;
+}
+
+.left_column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-grow: 2;
 }
 
 .right_column {
@@ -63,6 +63,9 @@ fieldset {
     max-width: 500px;
 }
 
+.short_name {
+    width: 150px;
+}
 
 input {
     padding: 0px;
@@ -94,10 +97,9 @@ select {
     color: #82b534;
 }
 
-button {
+#submit {
     width: 100%;
     padding: 10px 0;
-    margin: 10px auto;
     border-radius: 5px;
     border: none;
     background: #8ebf42; 

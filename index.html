@@ -5,6 +5,8 @@
     <link href=style.css rel='stylesheet' type='text/css'>
   </head>
   <body>
+    <a download="cont_truth.js" id="cont_download" style="display: none">Download Last Container File</a>
+    <a download="rack_truth.js" id="rack_download" style="display: none">Download Last Rack File</a>
     <div class="main-block">
     <form autocomplete="on">
       <fieldset>
@@ -31,9 +33,9 @@
                                 <input type="text" name="cb_thickness" > mm
                             </div>
                         </div>
-                            <div>
-                                <img src="images/vial_height.png" alt="start of new container wall angle marks new segment"></img>
-                            </div>
+                        <div>
+                            <img src="images/vial_height.png" alt="start of new container wall angle marks new segment"></img>
+                        </div>
                     </div>
                     <br>
                     <div>(Heights measured relative to inner base of container)</div>
@@ -74,7 +76,7 @@
                     <br>
                     <div class="subtitle">Segment 1</div>
                     <div class="subtitle">Segment approximation</div>
-                    <div name="shape1">
+                    <div id="shape1" name="shape1">
                         <input type="radio" name="shape1" id="cyl" value="cylinder" onclick="changeOps(this.value, 1)">
                         <label for="cyl">Cylinder</label>
                         <input type="radio" name="shape1" id="rect" value="rectangle" onclick="changeOps(this.value, 1)">
@@ -87,29 +89,32 @@
                         <label for="blank">Leave Blank</label><br>
                     </div>
                     <br>
-                    <div style="display:flex;flex-direction:row;gap:50px">
+                    <div style="display:flex;flex-direction:row;gap:70px">
                         <div>
                             <img id="shape_img1" src="images/blank.png" alt="container measurement diagram"></img>
                         </div>
                         <div id="interMeasures1" style="display:flex;flex-direction:column;justify-content:flex-start;">
                             <div>
                                 <label>Upper Internal Diameter:</label>
-                                <input type="text" name="up_ID1">mm
+                                <input type="text" id="up_ID1" name="up_ID1" onchange="volumes()">mm
                             </div>
                             <div>
                                 <label>Lower Internal Diameter:</label>
-                                <input type="text" name="low_ID1">mm
+                                <input type="text" id="low_ID1" name="low_ID1" onchange="volumes()">mm
                             </div>
                             <div>
                                 <label>Internal Segment Height:</label>
-                                <input type="text" name="in_SH1">mm
+                                <input type="text" id="in_SH1" name="in_SH1" onchange="volumes()">mm
                             </div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;">
+                            <strong id="vol1">Volume: 0 mm<sup>3</sup></strong>
                         </div>
                     </div>
                     <br>
                     <div class="subtitle">Segment 2</div>
                     <div class="subtitle">Segment approximation</div>
-                    <div name="shape2">
+                    <div id="shape2" name="shape2">
                         <input type="radio" name="shape2" id="cyl2" value="cylinder" onclick="changeOps(this.value, 2)">
                         <label for="cyl2">Cylinder</label>
                         <input type="radio" name="shape2" id="rect2" value="rectangle" onclick="changeOps(this.value, 2)">
@@ -126,23 +131,28 @@
                         <label for="blank2">Leave Blank</label><br>
                     </div>
                     <br>
-                    <div style="display:flex;flex-direction:row;gap:50px">
+                    <div style="display:flex;flex-direction:row;gap:70px">
                         <div>
                             <img id=shape_img2 src="images/blank.png" alt="container measurement diagram"></img>
                         </div>
                         <div id="interMeasures2" style="display:flex;flex-direction:column;justify-content:flex-start;">
                             <div>
                                 <label>Upper Internal Diameter:</label>
-                                <input type="text" name="up_ID2">mm
+                                <input type="text" id="up_ID2" name="up_ID2" onchange="volumes()">mm
                             </div>
                             <div>
                                 <label>Lower Internal Diameter:</label>
-                                <input type="text" name="low_ID2">mm
+                                <input type="text" id ="low_ID2"name="low_ID2" onchange="volumes()">mm
                             </div>
                             <div>
                                 <label>Internal Segment Height:</label>
-                                <input type="text" name="in_SH2">mm
+                                <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
                             </div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;">
+                            <strong id="vol2">Volume: 0 mm<sup>3</sup></strong>
+                            <br>
+                            <strong id="total_vol">Total Volume: 0 mm<sup>3</sup></strong>
                         </div>
                     </div>
                 </div>
@@ -255,11 +265,24 @@
                 </div>
             </div>
         </details>
-    </fieldset>
-    <button type="submit">Finish</button>
-  </form>
-  </div>
-  <script src="container_rack_truth.js" type="text/javascript"></script>
-  <script src="logic.js" type="text/javascript"></script>
+      </fieldset>
+    <div style="display:flex;flex-direction:row;gap:10px;">
+        <div style="display:flex;flex-direction:column">
+            <label>Submit Type</label>  
+            <select id="submit_type" class="short_name">
+                <option value="evaluate">Evaluate</option>
+                <option value="add_container">Add Container</option>
+                <option value="add_rack">Add Rack</option>
+            </select>
+        </div>
+        <div style="display:flex;flex-direction:column;width:90%">
+            <button type="submit" id="submit">Finish</button>
+        </div>
+    </div>
+    </form>
+    </div>
+    <script src="cont_truth.js" type="text/javascript"></script>
+    <script src="rack_truth.js" type="text/javascript"></script>
+    <script src="logic.js" type="text/javascript"></script>
   </body>
 </html>
