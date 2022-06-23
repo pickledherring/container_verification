@@ -111,3 +111,8 @@ select {
 button:hover {
     background: #82b534;
 }
+
+.how_to {
+    margin: 40px;
+    max-width: 600px;
+}
