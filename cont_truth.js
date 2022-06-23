@@ -9,11 +9,11 @@
 "b_height": 2,
 "lsh": 2,
 "clld": 2,
-"shape1": v_cone,
+"shape1": "v_cone",
 "up_ID1": 2,
 "low_ID1": 2,
 "in_SH1": 2,
-"shape2": v_cone,
+"shape2": "v_cone",
 "up_ID2": 2,
 "low_ID2": 2,
 "in_SH2": 2

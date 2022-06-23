@@ -23,7 +23,7 @@ function init() {
         let formData = new FormData(form)
         let output = {}
         for (const entry of formData) {
-            output[`${entry[0]}`] = entry[1]
+                output[`${entry[0]}`] = entry[1]
         }
         
         // should prevent a page refresh on submission
@@ -135,7 +135,12 @@ function addContRack(output, contOrRack) {
         for (const [key, value] of Object.entries(output)) {
             if (!rackFields.includes(key) && !(key == "cont_name")
                 && !(key == "n_segs")) {
-                newText += `,\n"${key}": ${value}`
+                if (key == "shape1" || key == "shape2") {
+                    newText += `,\n"${key}": "${value}"`
+                }
+                else {
+                    newText += `,\n"${key}": ${value}`
+                }
             }
         }
         newText += "\n}"
@@ -143,7 +148,7 @@ function addContRack(output, contOrRack) {
     }
     else {
         text = "let rack_truth =\n" + JSON.stringify(rack_truth).slice(0, -1)
-        newText += `,\n"${name}":\n{\n"type": ${output["type"]}`
+        newText += `,\n"${name}":\n{\n"type": "${output["type"]}"`
         for (const [key, value] of Object.entries(output)) {
             if (rackFields.includes(key) && !(key == "rack_name")
                 && !(key == "type")) {
@@ -204,122 +209,65 @@ function changeOps(val, num) {
     let img = document.getElementById(`shape_img${num}`)
     img.src = `images/${val}.png`
 
-    // !!!!!!!!!!!!!!!!!
-    // add onChanges to these to calculate volumes
-    // !!!!!!!!!!!!!!!!!
-    
-    // change measurement options, segment 1
-    if (num == 1) {
-        let measBlock = document.getElementById("interMeasures1")
-        switch(val) {
-            case "cylinder": {
-                measBlock.innerHTML = 
-                `<div>
-                    <label>Upper Internal Diameter:</label>
-                    <input type="text" id="up_ID1" name="up_ID1" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Internal Segment Height:</label>
-                    <input type="text" id="in_SH1" name="in_SH1" onchange="volumes()">mm
-                </div>`
-                break}
+    let measBlock = document.getElementById(`interMeasures${num}`)
+    switch(val) {
+        case "cylinder": {
+            measBlock.innerHTML = 
+            `<div>
+                <label>Upper Internal Diameter:</label>
+                <input type="text" id="up_ID${num}" name="up_ID${num}" onchange="volumes()">mm
+            </div>
+            <div>
+                <label>Internal Segment Height:</label>
+                <input type="text" id="in_SH${num}" name="in_SH${num}" onchange="volumes()">mm
+            </div>`
+            break}
 
-            case "rectangle": {
-                measBlock.innerHTML = 
-                `<div>
-                    <label>Width:</label>
-                    <input type="text" id="width1" name="width1" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Length:</label>
-                    <input type="text" id="length1" name="length1" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Internal Segment Height:</label>
-                    <input type="text" id="in_SH1" name="in_SH1" onchange="volumes()">mm
-                </div>`
-                break}
+        case "rectangle": {
+            measBlock.innerHTML = 
+            `<div>
+                <label>Width:</label>
+                <input type="text" id="width${num}" name="width${num}" onchange="volumes()">mm
+            </div>
+            <div>
+                <label>Length:</label>
+                <input type="text" id="length${num}" name="length${num}" onchange="volumes()">mm
+            </div>
+            <div>
+                <label>Internal Segment Height:</label>
+                <input type="text" id="in_SH${num}" name="in_SH${num}" onchange="volumes()">mm
+            </div>`
+            break}
 
-            case "inverted_cone":
-            case "v_cone": {
-                measBlock.innerHTML =
-                `<div>
-                    <label>Upper Internal Diameter:</label>
-                    <input type="text" id="up_ID1" name="up_ID1" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Lower Internal Diameter:</label>
-                    <input type="text" id="low_ID1" name="low_ID1" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Internal Segment Height:</label>
-                    <input type="text" id="in_SH1" name="in_SH1">mm
-                </div>`
-                break}
-        }
-    }
-    // segment 2
-    else {
-        let measBlock = document.getElementById("interMeasures2")
-        switch(val) {
-            case "cylinder": {
-                measBlock.innerHTML = 
-                `<div>
-                    <label>Upper Internal Diameter:</label>
-                    <input type="text" id="up_ID2" name="up_ID2" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Internal Segment Height:</label>
-                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
-                </div>`
-                break}
+        case "inverted_cone":
+        case "v_cone": {
+            measBlock.innerHTML =
+            `<div>
+                <label>Upper Internal Diameter:</label>
+                <input type="text" id="up_ID${num}" name="up_ID${num}" onchange="volumes()">mm
+            </div>
+            <div>
+                <label>Lower Internal Diameter:</label>
+                <input type="text" id="low_ID${num}" name="low_ID${num}" onchange="volumes()">mm
+            </div>
+            <div>
+                <label>Internal Segment Height:</label>
+                <input type="text" id="in_SH${num}" name="in_SH${num}" onchange="volumes()">mm
+            </div>`
+            break}
 
-            case "rectangle": {
-                measBlock.innerHTML = 
-                `<div>
-                    <label>Width:</label>
-                    <input type="text" id="width2" name="width2" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Length:</label>
-                    <input type="text" id="length2" name="length2" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Internal Segment Height:</label>
-                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
-                </div>`
-                break}
-
-            case "inverted_cone":
-            case "v_cone": {
-                measBlock.innerHTML =
-                `<div>
-                    <label>Upper Internal Diameter:</label>
-                    <input type="text" id"up_ID2" name="up_ID2" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Lower Internal Diameter:</label>
-                    <input type="text" id="low_ID2" name="low_ID2" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Internal Segment Height:</label>
-                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
-                </div>`
-                break}
-
-            case "round_base":
-            case "v_base": {
-                measBlock.innerHTML =
-                `<div>
-                    <label>Upper Internal Diameter:</label>
-                    <input type="text" id"up_ID2" name="up_ID2" onchange="volumes()">mm
-                </div>
-                <div>
-                    <label>Internal Segment Height:</label>
-                    <input type="text" id="in_SH2" name="in_SH2" onchange="volumes()">mm
-                </div>`
-                break}
-        }
+        case "round_base":
+        case "v_base": {
+            measBlock.innerHTML =
+            `<div>
+                <label>Upper Internal Diameter:</label>
+                <input type="text" id="up_ID${num}" name="up_ID${num}" onchange="volumes()">mm
+            </div>
+            <div>
+                <label>Internal Segment Height:</label>
+                <input type="text" id="in_SH${num}" name="in_SH${num}" onchange="volumes()">mm
+            </div>`
+            break}
     }
 }
 
@@ -334,12 +282,17 @@ function volumes() {
     for (elem of shape2Children) {
         if (elem.checked) {shape2 = elem.value}
     }
-    let vol1 = getVols(shape1, 1)
-    let vol2 = getVols(shape2, 2)
-    let total = vol1 + vol2
+    // have to use number.epsilon cause of js's janky math, still incorrect with
+    // values like 1.3549999999999999 (rounds to 1.36)
+    let vol1 = Math.round((getVols(shape1, 1) + Number.EPSILON) * 100) / 100
+    let vol2 = Math.round((getVols(shape2, 2) + Number.EPSILON) * 100) / 100
+    let total = Math.round(vol1 + vol2)
+
+    console.log(`shape1, shape2: ${shape1}, ${shape2}`)
+    console.log(`vol1, vol2, total: ${vol1}, ${vol2}, ${total}`)
     document.getElementById("vol1").innerHTML = `Volume: ${vol1} mm<sup>3</sup>`
     document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup>`
-    document.getElementById("total_vol").innerHTML = `Volume: ${total} mm<sup>3</sup>`
+    document.getElementById("total_vol").innerHTML = `Total Volume: ${total} mm<sup>3</sup>`
 }
 
 function getVols(shape, segment) {
