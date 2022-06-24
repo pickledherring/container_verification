@@ -5,11 +5,19 @@
     <link href=style.css rel='stylesheet' type='text/css'>
   </head>
   <body>
+    <div style="display:flex;flex-direction:row;gap:50px;margin-left:50px;">
+        <button class="topButt" onclick="window.open('how_to.html','_blank')">
+            How do I use this?
+        </button>
+        <button class="topButt" onclick="clearContainer()">
+            Clear Container Values
+        </button>
+        <button class="topButt" onclick="clearRack()">
+            Clear Rack Values
+        </button>
+    </div>
     <a download="cont_truth.js" id="cont_download" style="display: none">Download Last Container File</a>
     <a download="rack_truth.js" id="rack_download" style="display: none">Download Last Rack File</a>
-    <button onclick="window.open('how_to.html','_blank')" style="background:#8ebf42;font-size:14px;color:#fff;">
-        How do I use this?
-    </button>
     <div class="main-block">
     <form autocomplete="on">
       <fieldset>
@@ -182,7 +190,9 @@
                         <label for="reg_rack">Regular rectangular rack</label>
                         <input type="radio" name="type" id="reg_rack" value="reg_rack"><br>
                         <label for="irreg_rack">Irregular rack</label>
-                        <input type="radio" name="type" id="irreg_rack" value="irreg_rack">
+                        <input type="radio" name="type" id="irreg_rack" value="irreg_rack"><br>
+                        <label for="blank3">Leave blank</label>
+                        <input type="radio" name="type" id="blank3" value="blank">
                     </div>
                     <!-- <br>
                     <div style="display:flex;flex-direction:row;gap:50px">

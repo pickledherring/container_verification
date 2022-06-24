@@ -359,3 +359,21 @@ function getVols(shape, segment) {
         }
     } 
 }
+
+function clearContainer() {
+    document.getElementById("opt_conts").value = ''
+    document.getElementsByName("clld")[0].value = 1
+    document.getElementById("blank").checked = true
+    document.getElementById("blank2").checked = true
+    let container = document.querySelector("#container")
+    let textFields = container.querySelectorAll("input[type=text]")
+    textFields.forEach(elem => elem.value = '')
+}
+
+function clearRack() {
+    document.getElementById("opt_racks").value = ''
+    document.getElementById("blank3").checked = true
+    let container = document.querySelector("#rack")
+    let textFields = container.querySelectorAll("input[type=text]")
+    textFields.forEach(elem => elem.value = '')
+}
