@@ -286,7 +286,7 @@ function volumes() {
     // values like 1.3549999999999999 (rounds to 1.36)
     let vol1 = Math.round((getVols(shape1, 1) + Number.EPSILON) * 100) / 100
     let vol2 = Math.round((getVols(shape2, 2) + Number.EPSILON) * 100) / 100
-    let total = Math.round(vol1 + vol2)
+    let total = vol1 + vol2
 
     document.getElementById("vol1").innerHTML = `Volume: ${vol1} mm<sup>3</sup>`
     document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup>`
