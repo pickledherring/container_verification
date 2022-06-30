@@ -376,9 +376,18 @@ function volumes() {
     let vol2 = Math.round((getVols(shape2, 2) + Number.EPSILON) * 100) / 100
     let total = Math.round((vol1 + vol2 + Number.EPSILON) * 100) / 100
 
+    let hemi = Math.round((getVols("hemi", 2) + Number.EPSILON) * 100) / 100
+
     // write the volumes on the page
     document.getElementById("vol1").innerHTML = `Volume: ${vol1} mm<sup>3</sup>`
-    document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup>`
+    if (shape2 == "round_base") {
+        document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup></strong>
+        <br>
+        <strong id="hemi" value=${hemi}>Hemisphere Volume: ${hemi} mm<sup>3</sup></strong>`
+    } else{
+        document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup>`
+    }
+    
     document.getElementById("total_vol").innerHTML = `Total Volume: ${total} mm<sup>3</sup>`
     // write new values to the attributes
     document.getElementById("vol1").value = vol1
@@ -430,8 +439,8 @@ function getVols(shape, segment) {
                 return 0
             }
             
-            return Math.PI * in_SH * (Math.pow(up_ID / 2, 2) +
-                    Math.pow(low_ID / 2, 2) + up_ID * low_ID) / 3
+            return Math.PI * in_SH * ((Math.pow(up_ID / 2, 2) + up_ID / 2)
+                     * (Math.pow(low_ID / 2, 2) + low_ID / 2)) / 3
         }
         
         case "blank": {
@@ -448,8 +457,8 @@ function getVols(shape, segment) {
                 return 0
             }
             
-            // assuming this is a perfect hemisphere
-            return 2 * Math.PI * (Math.pow(up_ID / 2, 3)) / 3
+            // not assuming hemisphere perfection
+            return Math.PI * Math.pow(in_SH, 2) * (3 * (up_ID / 2) - in_SH) / 3
         }
 
         case "v_base": {
