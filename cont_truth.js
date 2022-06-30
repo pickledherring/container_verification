@@ -27,7 +27,7 @@
         "up_ID1":10.75,
         "low_ID1":10.5,
         "in_SH1":39.73,
-        "shape2":"v_cone",
+        "shape2":"v_base",
         "up_ID2":10.5,
         "low_ID2":4.3,
         "in_SH2":11.76

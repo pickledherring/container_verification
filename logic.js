@@ -1,6 +1,12 @@
 init()
 let tally = {}
-var textFile = null
+// download link for new rack/cont_truth.js
+var fileURL = null
+// contents of new rack/cont_truth.js
+var contContents = "let cont_truth =\n" + JSON.stringify(cont_truth, null, 4).slice(0, -2)
+var rackContents = "let rack_truth =\n" + JSON.stringify(rack_truth, null, 4).slice(0, -2)
+var anotherContainer = ""
+var anotherRack = ""
 
 function init() {
     // populate name drop downs, cont/rack_truth obtained from
@@ -23,7 +29,7 @@ function init() {
         let formData = new FormData(form)
         let output = {}
         for (const entry of formData) {
-                output[`${entry[0]}`] = entry[1]
+            output[`${entry[0]}`] = entry[1]
         }
         
         // should prevent a page refresh on submission
@@ -41,12 +47,15 @@ function process(output) {
 
     submit_type = document.getElementById("submit_type")
     if (submit_type.value == "evaluate") {
+        // add a container to a list to be added, can add more after
         evaluate(output)
     }
     else if (submit_type.value == "add_container") {
+        // add one or more containers
         addContRack(output, "container")
     }
     else {
+        // add a rack to a list to be added, can add more after
         addContRack(output, "rack")
     }
 }
@@ -58,18 +67,22 @@ function evaluate(output) {
 
     // if the user chose a container name
     if (output.cont_name) {
+        // assemble dictionary of true values to search/compare against
         for (const [key, trueValue] of Object.entries(cont_truth[output.cont_name])) {
             applicableKeyVals[key] = trueValue
         }
+        // name creation, doesn't affect much
         contRackCombo = output.cont_name
     }
     
     // if a rack name was chosen
     if (output.rack_name) {
+        // assemble dictionary of true values to search/compare against
         for (const [key, trueValue] of Object.entries(rack_truth[output.rack_name])) {
             applicableKeyVals[key] = trueValue
         }
         
+        // more name creation
         if (contRackCombo.length > 0) {
             contRackCombo += ` and ${output.rack_name}`
         }
@@ -106,6 +119,14 @@ function evaluate(output) {
         for (const [incKey, incVal] of Object.entries(results[1])) {
             let elems = document.getElementsByName(incKey)
             elems.forEach(elem => elem.style.backgroundColor = "#FDFF47")
+            if (incKey == "shape1") {
+                elems = document.querySelectorAll("div#interMeasures1>div>input")
+                elems.forEach(elem => elem.style.backgroundColor = "#FDFF47")
+            }
+            if (incKey == "shape2") {
+                elems = document.querySelectorAll("div#interMeasures2>div>input")
+                elems.forEach(elem => elem.style.backgroundColor = "#FDFF47")
+            }
         }
     }
         
@@ -119,23 +140,31 @@ function addContRack(output, contOrRack) {
     let name = prompt(`Values for this ${contOrRack} will be filled in
                     from the applicable section of the form.\n
                     What is the name of the ${contOrRack} (no quotes)?`)
-    // let another = prompt(`Would you like to enter another ${contOrRack} (y/n)?
-    //                     If yes, your download will be available after the next
-    //                     ${contOrRack} submission and answer "n" to this prompt`)
     
+    if (!name) {
+        name = prompt(`Name cannot be blank.\n
+                    What is the name of the ${contOrRack} (no quotes)?`)
+    }
+
     rackFields = ["rack_name", "up_width_x", "low_width_x", "seg_height_x",
     "plate_height", "plate_ch", "stack_height", "dist_bp_to_ob",
     "dist_bh", "dist_br", "left_oe", "front_oe", "width", "length"]
-    let text = ''
+
+    // following is some rather painful file writing
+    // could be improved, maybe just make an object and write the file from that
     let newText = ''
     
     if (contOrRack == "container") {
-        text = "let cont_truth =\n" + JSON.stringify(cont_truth, null, 4).slice(0, -2)
-        newText += `,\n\t"${name}":{\n\t\t"n_segs": ${output["n_segs"]}`
+        if (output["n_segs"]) {
+            newText += `,\n\t"${name}":{\n\t\t"n_segs": ${output["n_segs"]}`
+        } else {
+            newText += `,\n\t"${name}":{\n\t\t"n_segs": 1`
+        }
+
         for (const [key, value] of Object.entries(output)) {
             if (!rackFields.includes(key) && !(key == "cont_name")
-                && !(key == "n_segs")) {
-                if (key == "shape1" || key == "shape2") {
+                && !(key == "n_segs") && value) {
+                if (value != "blank" && key == "shape1" || key == "shape2") {
                     newText += `,\n\t\t"${key}": "${value}"`
                 }
                 else {
@@ -144,29 +173,73 @@ function addContRack(output, contOrRack) {
             }
         }
         newText += "\n\t}"
-        link = document.getElementById('cont_download')
+
+        anotherContainer = getAnother(contOrRack)
+
+        if (anotherContainer == "y" || anotherContainer == "yes") {
+            contContents += newText
+        }
+        else if (anotherContainer == "n" || anotherContainer == "no") {
+            contContents += newText + "\n}"
+            link = document.getElementById('cont_download')
+            createLink(contContents, link)
+            contContents = "let cont_truth =\n" + JSON.stringify(cont_truth, null, 4).slice(0, -2)
+        }
+        else {
+            contContents = "let cont_truth =\n" + JSON.stringify(cont_truth, null, 4).slice(0, -2)
+        }
     }
+
     else {
-        text = "let rack_truth =\n" + JSON.stringify(rack_truth, null, 4).slice(0, -2)
-        newText += `,\n\t"${name}":\n\t\t"type": "${output["type"]}"`
+        newText += `,\n\t"${name}":{\n\t\t"type": "${output["type"]}"`
         for (const [key, value] of Object.entries(output)) {
             if (rackFields.includes(key) && !(key == "rack_name")
-                && !(key == "type")) {
+                && !(key == "type") && value) {
                 newText += `,\n\t\t"${key}": ${value}`
             }
         }
         newText += "\n\t}"
-        link = document.getElementById('rack_download')
-    }
-    text += newText + "\n}"
-    let data = new Blob([text], {type: 'text/plain'})
 
-    // If we are replacing a previously generated file we need to
-    // manually revoke the object URL to avoid memory leaks.
-    if (textFile !== null) {window.URL.revokeObjectURL(textFile)}
-    textFile = window.URL.createObjectURL(data)
-    link.href = textFile
-    link.style.display = 'block'
+        anotherRack = getAnother(contOrRack)
+
+        if (anotherRack == "y" || anotherRack == "yes") {
+            rackContents += newText
+        }
+        else if (anotherRack == "n" || anotherRack == "no") {
+            rackContents += newText + "\n}"
+            link = document.getElementById('rack_download')
+            createLink(rackContents, link)
+            rackContents = "let rack_truth =\n" + JSON.stringify(rack_truth, null, 4).slice(0, -2)
+        }
+        else {
+            rackContents = "let rack_truth =\n" + JSON.stringify(rack_truth, null, 4).slice(0, -2)
+        }
+    }
+
+    function getAnother(type) {
+        let another = prompt(`Would you like to enter another ${type} (y/n)?
+                        If yes, your download will be available after the next
+                        ${type} submission and answer "n" to this prompt`)
+
+        if (!["y", "yes", "n", "no"].includes(another.toLowerCase())) {
+            another = prompt(`Please answer with "y" or "n" (no quotes).
+                            Any other response will erase this submission.
+                            Would you like to enter another ${type}?`)
+        }
+
+        return another.toLowerCase()
+    }
+
+    function createLink(contents, link) {
+        let data = new Blob([contents], {type: 'text/plain'})
+    
+        // If we are replacing a previously generated file we need to
+        // manually revoke the object URL to avoid memory leaks.
+        if (fileURL !== null) {window.URL.revokeObjectURL(fileURL)}
+        fileURL = window.URL.createObjectURL(data)
+        link.href = fileURL
+        link.style.display = 'block'
+    }
 }
 
 // iterates through list of true key value pairs and evaluates against output
@@ -211,6 +284,7 @@ function changeOps(val, num) {
 
     let measBlock = document.getElementById(`interMeasures${num}`)
     switch(val) {
+        case "blank":
         case "cylinder": {
             measBlock.innerHTML = 
             `<div>
@@ -269,9 +343,23 @@ function changeOps(val, num) {
             </div>`
             break}
     }
+
+    // resetting applicable volumes
+    let volume = document.getElementById(`vol${num}`)
+    let totalVol = document.getElementById(`total_vol`)
+    if (totalVol.value && volume.value) {
+        totalVol.innerHTML = `Total Volume: ${totalVol.value - volume.value} mm<sup>3</sup>`
+        totalVol.value = totalVol.value - volume.value
+    }
+
+    if (volume.value) {
+        volume.innerHTML = `Volume: 0 mm<sup>3</sup>`
+        volume.value = 0
+    }
 }
 
 function volumes() {
+    // find our radio value, need this if none were checked
     let shape1Children = document.querySelectorAll("#shape1 > input")
     let shape2Children = document.querySelectorAll("#shape2 > input")
     let shape1 = 'blank'
@@ -286,11 +374,16 @@ function volumes() {
     // values like 1.3549999999999999 (rounds to 1.36)
     let vol1 = Math.round((getVols(shape1, 1) + Number.EPSILON) * 100) / 100
     let vol2 = Math.round((getVols(shape2, 2) + Number.EPSILON) * 100) / 100
-    let total = vol1 + vol2
+    let total = Math.round((vol1 + vol2 + Number.EPSILON) * 100) / 100
 
+    // write the volumes on the page
     document.getElementById("vol1").innerHTML = `Volume: ${vol1} mm<sup>3</sup>`
     document.getElementById("vol2").innerHTML = `Volume: ${vol2} mm<sup>3</sup>`
     document.getElementById("total_vol").innerHTML = `Total Volume: ${total} mm<sup>3</sup>`
+    // write new values to the attributes
+    document.getElementById("vol1").value = vol1
+    document.getElementById("vol2").value = vol2
+    document.getElementById("total_vol").value = total
 }
 
 function getVols(shape, segment) {
@@ -299,6 +392,7 @@ function getVols(shape, segment) {
             let width = 0
             let length = 0
             let in_SH = 0
+            // will error if fields left blank, assume that means value = 0
             try {
                 width = document.getElementById(`width${segment}`).value
                 length = document.getElementById(`length${segment}`).value
@@ -340,9 +434,22 @@ function getVols(shape, segment) {
                     Math.pow(low_ID / 2, 2) + up_ID * low_ID) / 3
         }
         
-        case "blank":
-        case "round_base": {
+        case "blank": {
             return 0
+        }
+
+        case "round_base": {
+            let up_ID = 0
+            let in_SH = 0
+            try {
+                up_ID = document.getElementById(`up_ID${segment}`).value
+                in_SH = document.getElementById(`in_SH${segment}`).value
+            } catch (error) {
+                return 0
+            }
+            
+            // assuming this is a perfect hemisphere
+            return 2 * Math.PI * (Math.pow(up_ID / 2, 3)) / 3
         }
 
         case "v_base": {
@@ -361,6 +468,7 @@ function getVols(shape, segment) {
 }
 
 function clearContainer() {
+    // resets values
     document.getElementById("opt_conts").value = ''
     document.getElementsByName("clld")[0].value = 1
     document.getElementById("blank").checked = true
@@ -368,9 +476,14 @@ function clearContainer() {
     let container = document.querySelector("#container")
     let textFields = container.querySelectorAll("input[type=text]")
     textFields.forEach(elem => elem.value = '')
+    // clear highlighting
+    let allNamed = document.querySelectorAll(`input, select, div[name='shape1'],
+    div[name='shape2'], div[name='type']`)
+    allNamed.forEach(elem => elem.style.backgroundColor = '')
 }
 
 function clearRack() {
+    // resets values
     document.getElementById("opt_racks").value = ''
     document.getElementById("blank3").checked = true
     let container = document.querySelector("#rack")
