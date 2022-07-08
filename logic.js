@@ -437,8 +437,8 @@ function getVols(shape, segment) {
                 return 0
             }
             
-            return Math.PI * in_SH * ((Math.pow(up_ID / 2, 2) + up_ID / 2)
-                     * (Math.pow(low_ID / 2, 2) + low_ID / 2)) / 3
+            return Math.PI * in_SH * (Math.pow(up_ID / 2, 2) + (up_ID / 2) * (low_ID / 2)
+                      + (Math.pow(low_ID / 2, 2))) / 3
         }
         
         case "blank": {
@@ -456,7 +456,7 @@ function getVols(shape, segment) {
             }
             
             // not assuming hemisphere perfection
-            return Math.PI * Math.pow(in_SH, 2) * (3 * (up_ID / 2) - in_SH) / 3
+            return Math.PI * in_SH * (Math.pow(in_SH, 2) + 3 * Math.pow(up_ID / 2, 2)) / 6
         }
 
         case "hemi": {
